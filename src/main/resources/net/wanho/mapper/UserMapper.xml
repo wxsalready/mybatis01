@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间指向对应接口-->
+<mapper namespace="net.wanho.mapper.UserMapper">
+
+    <resultMap id="UserId" type="User">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="gender" property="gender"/>
+        <result column="pid" property="pid"/>
+
+    </resultMap>
+
+
+
+
+
+
+
+
+    <!--id  对应中接口方法名
+        parameterType  参数类型
+    -->
+    <insert id="addUser" parameterType="User">
+        insert into user values(null,#{username},#{password},#{gender},#{pid})
+
+    </insert>
+    <insert id="addUser1" useGeneratedKeys="true" parameterType="User" keyProperty="id">
+        insert into user values(null,#{username},#{password},#{gender},#{pid})
+
+
+    </insert>
+    <insert id="addUser2">
+        <selectKey keyProperty="id" order="AFTER" resultType="int">
+            SELECT last_insert_id()
+        </selectKey>
+        insert into user values(null,#{username},#{password},#{gender},#{pid})
+    </insert>
+    <update id="updateUser">
+        UPDATE USER SET username=#{param1},password=#{param2},gender=#{param3},pid=#{param4} where id=#{param5}
+    </update>
+    <update id="updateUser1">
+        UPDATE USER SET username=#{user.username},password=#{user.password},gender=#{user.gender},pid=#{user.pid} where id=#{id}
+    </update>
+    <select id="selectAllUser" resultMap="UserId">
+        select * from user
+    </select>
+    <select id="selectOneById" resultType="net.wanho.pojo.User">
+        SELECT * FROM USER WHERE ID=#{id}
+    </select>
+    <select id="selectByUsername" resultType="net.wanho.pojo.User">
+        SELECT * FROM  USER WHERE username LIKE concat ("%",#{username},"%")
+    </select>
+
+</mapper>
